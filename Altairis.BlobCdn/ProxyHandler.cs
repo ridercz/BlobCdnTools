@@ -27,6 +27,12 @@ namespace Altairis.BlobCdn {
         public override Task ProcessRequestAsync(HttpContext context) {
             var fileName = context.Request.RequestContext.RouteData.Values["path"] as string;
 
+            if (string.IsNullOrWhiteSpace(fileName)) {
+                context.Response.StatusCode = 404;
+                context.Response.StatusDescription = "Object Not Found";
+                return context.Response.Output.WriteLineAsync("<h1>HTTP Error 404</h1> Object Not Found");
+            }
+
             // Get blob and send it to user
             var blob = container.GetBlockBlobReference(fileName);
             context.Response.ContentType = blob.Properties.ContentType;
