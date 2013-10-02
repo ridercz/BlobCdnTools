@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.20827.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Altairis.BlobCdn", "Altairis.BlobCdn\Altairis.BlobCdn.csproj", "{6BABE58D-1C5B-44D3-8873-47464918FD95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Altairis.BlobCdn.DemoSite", "Altairis.BlobCdn.DemoSite\Altairis.BlobCdn.DemoSite.csproj", "{8CD68F18-868D-43D7-AAD6-8C4B5EF3598A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6BABE58D-1C5B-44D3-8873-47464918FD95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BABE58D-1C5B-44D3-8873-47464918FD95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BABE58D-1C5B-44D3-8873-47464918FD95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CD68F18-868D-43D7-AAD6-8C4B5EF3598A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CD68F18-868D-43D7-AAD6-8C4B5EF3598A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CD68F18-868D-43D7-AAD6-8C4B5EF3598A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CD68F18-868D-43D7-AAD6-8C4B5EF3598A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
