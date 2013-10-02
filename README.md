@@ -1,4 +1,4 @@
 BlobCdnTools
 ============
 
-Tools from making simple CDN from Windows Azure Blob Storage
+Tools for making simple CDN from Windows Azure Blob Storage.
