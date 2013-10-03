@@ -12,6 +12,7 @@ namespace Altairis.BlobCdn.Uploader {
     class Program {
         private const int ERRORLEVEL_SUCCESS = 0;
         private const int ERRORLEVEL_FAILURE = 1;
+        private const int SECONDS_PER_DAY = 86400;
         private const int MEGABYTE = 1048576;                   // 1 MB
         private const int FILE_SIZE_THRESHOLD = 32 * MEGABYTE;  // 32 MB
         private const int BLOCK_SIZE = 4 * MEGABYTE;            // 4 MB
@@ -32,6 +33,7 @@ namespace Altairis.BlobCdn.Uploader {
             [Required(Description = "Storage account name")]                    string accountName,
             [Required(Description = "Primary or secondary access key")]         string accessKey,
             [Optional("cdn", "c", Description = "Container name")]              string containerName,
+            [Optional(30, "md", Description = "Value of max-age in days")]      int maxAge,
             [Optional(false, "x", Description = "Overwrite existing files")]    bool overwrite,
             [Optional(false, Description = "Show verbose error messages")]      bool debug) {
 
@@ -73,6 +75,9 @@ namespace Altairis.BlobCdn.Uploader {
                     // Set blob content type
                     blob.Properties.ContentType = FileTypeHelper.GetMimeType(Path.GetExtension(fileName));
 
+                    // Set blob expiration (using max-age, because is dynamic)
+                    if (maxAge > 0) blob.Properties.CacheControl = "public, max-age=" + (maxAge * SECONDS_PER_DAY);
+                    
                     // Upload blob
                     var fi = new FileInfo(fileName);
                     UploadFileToBlob(fi, blob);
