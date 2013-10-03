@@ -27,6 +27,7 @@ namespace Altairis.BlobCdn {
         public override Task ProcessRequestAsync(HttpContext context) {
             var fileName = context.Request.RequestContext.RouteData.Values["path"] as string;
 
+            // Handle invalid input
             if (string.IsNullOrWhiteSpace(fileName)) {
                 context.Response.StatusCode = 404;
                 context.Response.StatusDescription = "Object Not Found";
@@ -35,9 +36,9 @@ namespace Altairis.BlobCdn {
 
             // Get blob and send it to user
             var blob = container.GetBlockBlobReference(fileName);
-            context.Response.ContentType = blob.Properties.ContentType;
             context.Response.Cache.SetCacheability(HttpCacheability.Public);
             context.Response.Cache.SetExpires(DateTime.Now.AddDays(expireDays));
+            context.Response.ContentType = FileTypeHelper.GetMimeType(System.IO.Path.GetExtension(fileName));
             return blob.DownloadToStreamAsync(context.Response.OutputStream);
         }
 

@@ -63,6 +63,7 @@
     <Compile Include="Configuration\BlobCdnSection.cs" />
     <Compile Include="Configuration\CachingElement.cs" />
     <Compile Include="Configuration\StorageElement.cs" />
+    <Compile Include="FileTypeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxyHandler.cs" />
     <Compile Include="ProxyRouteHandler.cs" />

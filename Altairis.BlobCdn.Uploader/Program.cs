@@ -70,6 +70,9 @@ namespace Altairis.BlobCdn.Uploader {
                         continue;
                     }
 
+                    // Set blob content type
+                    blob.Properties.ContentType = FileTypeHelper.GetMimeType(Path.GetExtension(fileName));
+
                     // Upload blob
                     var fi = new FileInfo(fileName);
                     UploadFileToBlob(fi, blob);
@@ -100,7 +103,7 @@ namespace Altairis.BlobCdn.Uploader {
         }
 
         private static void UploadFileToBlob(FileInfo fileInfo, CloudBlockBlob blob) {
-            Console.Write("{0:N2} MB", (float)fileInfo.Length / MEGABYTE);
+            Console.Write("{0:N2} MB of {1}", (float)fileInfo.Length / MEGABYTE, blob.Properties.ContentType);
             if (fileInfo.Length <= FILE_SIZE_THRESHOLD) {
                 // Blob is smaller than limit - single step upload
                 Console.Write("...");
