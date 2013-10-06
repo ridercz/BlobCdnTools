@@ -11,7 +11,7 @@ namespace Altairis.BlobCdn.DemoSite {
 
         protected void Application_Start(object sender, EventArgs e) {
             // Add route for handling CDNs
-            RouteTable.Routes.Add(new Route("cdn/{*path}", new ProxyRouteHandler()));
+            RouteTable.Routes.Add(new Route("cdn/{*path}", new RouteHandlerProxy<ProxyHandlerAsync>()));
         }
 
     }
