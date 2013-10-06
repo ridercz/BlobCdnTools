@@ -1,16 +1,14 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace Altairis.BlobCdn {
+
     public class ProxyHandler : IHttpHandler {
         private static CloudBlobContainer container;
         private static int expireDays;
+
         static ProxyHandler() {
             var cfg = System.Configuration.ConfigurationManager.GetSection("altairis.blobCdn") as Altairis.BlobCdn.Configuration.BlobCdnSection;
 
@@ -33,21 +31,39 @@ namespace Altairis.BlobCdn {
         }
 
         public void ProcessRequest(HttpContext context) {
+            if (context == null) throw new ArgumentNullException("context");
+
             var fileName = context.Request.RequestContext.RouteData.Values["path"] as string;
 
             // Handle invalid input
             if (string.IsNullOrWhiteSpace(fileName)) {
-                context.Response.StatusCode = 404;
-                context.Response.StatusDescription = "Object Not Found";
-                context.Response.Output.WriteLine("<h1>HTTP Error 404</h1> Object Not Found");
-            } else {
+                SetErrorContext(context, 400, "Bad Request");
+                return;
+            }
+
             // Get blob and send it to user
             var blob = container.GetBlockBlobReference(fileName);
             context.Response.Cache.SetCacheability(HttpCacheability.Public);
             context.Response.Cache.SetExpires(DateTime.Now.AddDays(expireDays));
             context.Response.ContentType = FileTypeHelper.GetMimeType(System.IO.Path.GetExtension(fileName));
-            blob.DownloadToStream(context.Response.OutputStream);
+            try {
+                blob.DownloadToStream(context.Response.OutputStream);
+            }
+            catch (StorageException sex) {
+                SetErrorContext(context, sex.RequestInformation.HttpStatusCode, sex.RequestInformation.HttpStatusMessage);
             }
         }
+
+        private void SetErrorContext(HttpContext context, int status, string description) {
+            if (context == null) throw new ArgumentNullException("context");
+            if (status < 100 || status > 999) throw new ArgumentOutOfRangeException("status");
+            if (description == null) throw new ArgumentNullException("description");
+            if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "description");
+
+            context.Response.StatusCode = status;
+            context.Response.StatusDescription = description;
+            context.Response.Output.WriteLine(string.Format(Properties.Resources.ErrorPage, status, description));
+        }
+
     }
 }
